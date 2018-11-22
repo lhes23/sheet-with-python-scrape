@@ -1,11 +1,9 @@
 import requests
 import bs4
-from lxml import html
 import csv
 import os
 
 # for Request
-#url = 'https://www.getwsodo.com/requests/?pagenum=10'
 
 def getswodo_request(url):
 	req = requests.get(url)
@@ -31,6 +29,6 @@ def getswodo_request(url):
 
 	print('Successfully Added')
 
-#url = input('what is the url?') 
-url = 'https://www.getwsodo.com/requests/?pagenum=6'
+url = input('what is the url?') 
+#url = 'https://www.getwsodo.com/requests/?pagenum=4'
 getswodo_request(url)

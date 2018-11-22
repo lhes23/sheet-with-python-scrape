@@ -1,6 +1,8 @@
 import requests
 import bs4
 from lxml import html
+import csv
+import os
 
 # for Request
 #url = 'https://www.getwsodo.com/requests/?pagenum=10'
@@ -21,8 +23,14 @@ def getswodo_request(url):
 		vote = tr.find_all('td')[2].text.strip()
 		data.append([course,link,vote])
 
-	print(data)
+	with open('request.csv','w') as writeFile:
+		writer = csv.writer(writeFile)
+		writer.writerows(data)
 
+	writeFile.close()
 
-url = input('what is the url?') 
+	print('Successfully Added')
+
+#url = input('what is the url?') 
+url = 'https://www.getwsodo.com/requests/?pagenum=6'
 getswodo_request(url)

@@ -3,6 +3,7 @@ import bs4
 import csv
 import os
 
+# For Presentation
 # for Request
 
 def getswodo_request(url):

@@ -3,10 +3,18 @@ from bs4 import BeautifulSoup
 import csv
 import os
 
+# links to be scrape
+link = [
+	"https://www.onlinejobs.ph/jobseekers/jobsearch",
+	"https://www.onlinejobs.ph/jobseekers/jobsearch/30",
+	"https://www.onlinejobs.ph/jobseekers/jobsearch/60",
+]
 
-link = ["https://www.onlinejobs.ph/jobseekers/jobsearch/30"]
+#Initiate the list
 data = []
 
+
+# function for scraping the site
 def scrapeSite(url):
 	r = requests.get(url)
 	soup = BeautifulSoup(r.text,'html.parser')
@@ -20,17 +28,17 @@ def scrapeSite(url):
 		salary = job.find_all('p')[2].text.strip()
 		details = job.find_all('p')[4].text.strip()
 		data.append([title,category,salary,details])
-	print(data)
+	return data
 
+# write to CSV file
+def writeToFile(data):
+	with open('jobs.csv','w') as writeFile:
+		writer = csv.writer(writeFile)
+		writer.writerows(data)
+	writeFile.close()
+	print("Done!")
 
-# def writeToFile(data):
-# 	with open('jobs.csv','w') as writeFile:
-# 		writer = csv.writer(writeFile)
-# 		writer.writerows(data)
-# 	writeFile.close()
-# 	print("Done!")
-
-
+# Process the links
 for url in link:
 	data = scrapeSite(url)
-	#writeToFile(data)
+	writeToFile(data)

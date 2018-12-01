@@ -18,16 +18,19 @@ data = []
 def scrapeSite(url):
 	r = requests.get(url)
 	soup = BeautifulSoup(r.text,'html.parser')
-	section = soup.find("section",{'class':'bg-lwhite'})
+	section = soup.find('section',{'class':'bg-lwhite'})
 	div = section.find('div',{'class':'col-md-7'})
+	div.find('div',{'class':'text-center'}).decompose()
 
-	a = div.find_all('div',{'class':'jobs-box'})
+	a = div.find_all('a')
 	for job in a:
-		title = job.find_all('p')[0].text.strip()
-		category = job.find_all('p')[1].text.strip()
-		salary = job.find_all('p')[2].text.strip()
-		details = job.find_all('p')[4].text.strip()
-		data.append([title,category,salary,details])
+		for jobs_box in job.find_all('div',{'class':'jobs-box'}):
+			title = jobs_box.find_all('p')[0].text.strip()
+			category = jobs_box.find_all('p')[1].text.strip()
+			salary = jobs_box.find_all('p')[2].text.strip()
+			details = jobs_box.find_all('p')[4].text.strip()
+		link = job.get('href')
+		data.append([title, category, salary, details, link])
 	return data
 
 # write to CSV file
@@ -36,9 +39,10 @@ def writeToFile(data):
 		writer = csv.writer(writeFile)
 		writer.writerows(data)
 	writeFile.close()
-	print("Done!")
+	
 
 # Process the links
 for url in link:
 	data = scrapeSite(url)
 	writeToFile(data)
+print('Done!')
